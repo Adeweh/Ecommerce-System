@@ -1,4 +1,4 @@
-const e = require("express");
+
 
 const notFound = (req, res, next) => {
     const error = new Error (`Not Found: ${req.originalUrl}`);
@@ -7,8 +7,8 @@ const notFound = (req, res, next) => {
 };
 
 const errorHandler = (err, req, res, next) => {
-    const statuscode = res.statuscode == 200 ? 500 : res.statuscode;
-    res.status(statuscode);
+    const statusCode = res.statusCode == 200 ? 500 : res.statusCode;
+    res.status(statusCode);
     res.json({
         message: err?.message,
         stack: err?.stack,
