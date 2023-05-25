@@ -31,9 +31,61 @@ const loginUser = asyncHandler(async(req, res) =>{
     }else{
         throw new Error("User doesn't Exits");
     }
-   
-
-
 });
 
-module.exports = {createUser, loginUser};
+
+const getAllUser = asyncHandler(async (req, res) =>{
+    try{
+        const getUsers = await User.find();
+        res.json(getUsers);
+    }catch(error){
+        throw new Error(error);
+    }
+})
+
+
+const getAUser = asyncHandler(async(req, res)=> {
+    const{id}= req.params;
+    try{
+        const getUser = await User.findById(id);
+        res.json({
+            getUser,
+        });
+
+    }catch(error){
+        throw new Error(error);
+    } 
+});
+
+const deleteUser = asyncHandler(async(req, res)=> {
+    const{id}= req.params;
+    try{
+        const deleteUser = await User.findByIdAndDelete(id);
+        res.json({
+            deleteUser,
+        });
+
+    }catch(error){
+        throw new Error(error);
+    } 
+});
+
+
+const updateUser = asyncHandler(async(req, res)=>{
+    const {id} = req.params;
+    try{
+        const updateUser = await User.findByIdAndUpdate(id, {
+            fullname: req?.body.fullname,
+            email: req?.body.email,
+            mobile: req?.body.mobile,
+        },
+        {
+            new: true,
+        });
+        res.json(updateUser);
+    }catch(error){
+        throw new Error(error);
+    }
+})
+
+module.exports = {createUser, loginUser, getAllUser, getAUser, deleteUser, updateUser};
