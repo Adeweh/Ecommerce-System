@@ -25,19 +25,20 @@ var userSchema = new mongoose.Schema({
         type: String,
         default: "user",
     },
-    cart:{
-        type: Array,
-        default: [],
-    },
     isBlocked:{
         type: Boolean,
         default: false,
     },
+    cart:{
+        type: Array,
+        default: [],
+    },
+   
+    address:[{type: mongoose.Schema.Types.ObjectId, ref: "Address"}],
+    wishlist: [{type: mongoose.Schema.Types.ObjectId, ref: "Product"}],
     refreshToken:{
         type: String,
     },
-    address:[{type: mongoose.Schema.Types.ObjectId, ref: "Address"}],
-    wishlist: [{type: mongoose.Schema.Types.ObjectId, ref: "Product"}],
 },{
     timestamps: true,
 });
@@ -46,6 +47,7 @@ var userSchema = new mongoose.Schema({
 userSchema.pre('save', async function(next){
     const salt = await bcrypt.genSaltSync(10);
     this.password = await bcrypt.hash(this.password, salt);
+    next();
 
 });
 
