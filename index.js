@@ -4,9 +4,11 @@ const app = express();
 const dotenv = require("dotenv" ).config();
 const PORT = process.env.PORT || 4000;
 const authRouter = require('./routes/authRoutes');
+const producRouter = require('./routes/productRoutes');
 const bodyParser = require("body-parser");
 const { notFound, errorHandler } = require("./middlewares/errorHandler");
 const cookieParser = require("cookie-parser")
+
 
 
 dbConnect();
@@ -16,6 +18,7 @@ app.use(cookieParser());
 
 
 app.use('/api/user', authRouter);
+app.use('/api/product', producRouter);
 
 app.use(notFound);
 app.use(errorHandler);
