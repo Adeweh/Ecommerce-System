@@ -18,7 +18,7 @@ var productSchema = new mongoose.Schema({
         required:true,
     },
     price:{
-        type:Number,
+        type: Number,
         required:true,
     },
     category:{
@@ -35,7 +35,7 @@ var productSchema = new mongoose.Schema({
     },
     sold: {
         type: Number,
-        default: 0
+        default: 0,
     },
     images:{
         type:Array,
