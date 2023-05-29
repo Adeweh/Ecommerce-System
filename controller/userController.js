@@ -20,35 +20,30 @@ const createUser = asyncHandler (async(req, res) =>{
 });
 
 
-const loginUser = asyncHandler(async(req, res) =>{
-    const {email, password} = req.body;
-    const findUser = await User.findOne({email});
-    if (findUser && (await findUser.isPasswordMatched(password))){
-        const refreshToken = await generateRefreshToken(findUser?._id);
-        const updateUser = await User.findByIdAndUpdate(findUser.id, {
-            refreshToken: refreshToken,
-        }, {
-            new: true
-        });
-        res.cookie("refreshToken", refreshToken,{
-            httpOnly: true,
-            maxAge: 72 * 60 * 60 * 1000,
-
-        });
-        
-    
-        res.json({
-            _id: findUser?._id,
-            fullname: findUser?.fullname,
-            email: findUser?.email,
-            mobile: findUser?.mobile,
-            token: generateToken(findUser?._id),
-        });
-
-    }else{
-        throw new Error("Invalid Credentials");
+const loginUser = asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
+    const findUser = await User.findOne({ email });
+    if (findUser && (await findUser.isPasswordMatched(password))) {
+      const refreshToken = await generateRefreshToken(findUser?._id);
+      await User.findByIdAndUpdate(findUser._id, { refreshToken }, { new: true });
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        maxAge: 72 * 60 * 60 * 1000,
+      });
+  
+      res.json({
+        _id: findUser._id,
+        fullname: findUser.fullname,
+        email: findUser.email,
+        mobile: findUser.mobile,
+        token: generateToken(findUser._id),
+      });
+    } else {
+      throw new Error("Invalid Credentials");
     }
-});
+  });
+
+
 
 
 const handleRefreshToken = asyncHandler(async(req, res) =>{
@@ -191,13 +186,13 @@ const unblockUser = asyncHandler(async(req, res)=>{
 
 const updatePassword = asyncHandler(async(req, res)=>{
     const { _id } = req.user;
-    const password = req.body;
+    const { password } = req.body;
     validateMongoDbId(_id);
     const user = await User.findById(_id);
     if(password){
         user.password = password;
-        const updatePassword = await user.save();
-        res.json(updatePassword);
+        const updateUserPassword = await user.save();
+        res.json(updateUserPassword);
     }else{
         res.json(user);
     }
