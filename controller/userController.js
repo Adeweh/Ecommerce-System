@@ -199,4 +199,6 @@ const updatePassword = asyncHandler(async(req, res)=>{
 
 });
 
-module.exports = {createUser, loginUser, getAllUser, getAUser, deleteUser, updateUser, blockUser, unblockUser, handleRefreshToken, logOut, updatePassword};
+const forgotPasswordToken = asyncHandler(async(req, res)=>{})
+
+module.exports = {createUser, loginUser, getAllUser, getAUser, deleteUser, updateUser, blockUser, unblockUser, handleRefreshToken, logOut, updatePassword, forgotPasswordToken};
