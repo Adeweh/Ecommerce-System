@@ -5,6 +5,7 @@ const { generateToken } = require('../config/jwtToken');
 const validateMongoDbId = require('../utils/validateMongodb');
 const { generateRefreshToken } = require('../config/refreshToken');
 const jwt = require('jsonwebtoken');
+const sendEmail = require('./emailController');
 
 
 const createUser = asyncHandler (async(req, res) =>{
@@ -199,6 +200,28 @@ const updatePassword = asyncHandler(async(req, res)=>{
 
 });
 
-const forgotPasswordToken = asyncHandler(async(req, res)=>{})
+const forgotPasswordToken = asyncHandler(async(req, res)=>{
+    const {email} = req.body;
+    const user = await user.findOne({email});
+    if(!user) throw new Error("User not Found");
+    try{
+        const token = await user.createPasswordResetToken();
+        await user.save();
+        const resetURL = `Follow this link to reset your Password. Link valid for 10 minutes. <a href='http://localhost:5001/api/user/reset-password/${token}'>Click Here</a>`;
+        const data ={
+            to:email,
+            text: "Welcome",
+            subject: "Forgot Password Link",
+            htm: resetURL
+        };
+        sendEmail(data);
+        res.json(token);
+        
+
+    }catch (error){
+        throw new Error(error)
+    }
+
+});
 
 module.exports = {createUser, loginUser, getAllUser, getAUser, deleteUser, updateUser, blockUser, unblockUser, handleRefreshToken, logOut, updatePassword, forgotPasswordToken};
