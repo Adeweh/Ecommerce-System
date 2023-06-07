@@ -3,30 +3,27 @@ const mongoose = require('mongoose'); // Erase if already required
 // Declare the Schema of the Mongo model
 var blogSchema = new mongoose.Schema({
     title:{
-        type:String,
+        type: String,
         required:true,
-
     },
     description:{
-        type:String,
+        type: String,
         required:true,
-        unique:true,
     },
     category:{
-        type:String,
+        type: String,
         required:true,
-        unique:true,
     },
     numViews:{
         type:Number,
         default: 0,
     },
     isLiked:{
-        type:Boolean,
+        type: Boolean,
         default: false,
     },
     isDisLiked:{
-        type:Boolean,
+        type: Boolean,
         default: false,
     },
     likes:[{
@@ -41,6 +38,15 @@ var blogSchema = new mongoose.Schema({
         type:String,
         default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREgQ1h0NR-YTLxlS0Ld4gAgWOhb-P7ZFSBo84LwBFkYmXz4ilwYHdlbwM-3XhFiZlIFM8&usqp=CAU",
     },
+    author:{
+        type:String,
+        default: "Admin"
+    },
+}, {
+    toJSON: {
+        virtuals: true,
+    },
+    timestamps: true,
 });
 
 //Export the model
