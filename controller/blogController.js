@@ -7,16 +7,22 @@ const validateMongoDbId = require("../utils/validateMongodb");
 const createBlog = asyncHandler(async(req, res) => {
     try{
         const newBlog = await Blog.create(req.body);
-        res.json({
-            status: "success",
-            newBlog
-        })
-
+        res.json(newBlog);
     }catch(error){
         throw new Error(error);
     }
 
 });
 
+const updateBlog = asyncHandler(async(req, res) => {
+    const {id} = req.params;
+    try{
+        const updateBlog = await Blog.findByIdAndUpdate(id, req.body, {new:true});
+        res.json(updateBlog);
+    }catch(error){
+        throw new Error(error);
+    }
 
-module.exports = {createBlog}
+});
+
+module.exports = {createBlog, updateBlog}
