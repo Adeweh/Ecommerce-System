@@ -124,17 +124,17 @@ const dislikeBlog = asyncHandler(async(req, res) => {
 
     const loginUserId = req?.user?._id;
 
-    const isLiked = blog?.isLiked;
+    const isDisLiked = blog?.isDisLiked;
 
-    const alreadyDisliked = blog?.dislikes?.find(
+    const alreadyliked = blog?.likes?.find(
         (userId) => userId?.toString() === loginUserId?.toString())
     ;
-    if(alreadyDisliked){
+    if(alreadyLiked){
         const blog = await Blog.findByIdAndUpdate(
             blogId,
             {
-                $pull: {dislikes: loginUserId},
-                isDisliked: false,
+                $pull: {likes: loginUserId},
+                isLiked: false,
             },
             {
             new: true
@@ -142,12 +142,12 @@ const dislikeBlog = asyncHandler(async(req, res) => {
         );
         res.json(blog);
     }
-    if(isLiked){
+    if(isDisLiked){
         const blog = await Blog.findByIdAndUpdate(
             blogId,
             {
-                $pull: {likes: loginUserId},
-                isLiked: false,
+                $pull: {dislikes: loginUserId},
+                isDisliked: false,
             },
             {new: true}
         );
@@ -156,9 +156,9 @@ const dislikeBlog = asyncHandler(async(req, res) => {
         const blog = await Blog.findByIdAndUpdate(
             blogId,
             {
-                $push: {likes: loginUserId},
-                isLiked: true,
-            },
+                $push: {dislikes: loginUserId},
+                isDisliked: true,
+            }, 
             {new: true }
         );
         res.json(blog);
