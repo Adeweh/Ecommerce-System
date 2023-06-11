@@ -183,4 +183,4 @@ const addToWishList = asyncHandler(async(req, res)=> {
 
 
 
-module.exports = {createProduct, getAProduct, getAllProduct, updateProduct, deleteProduct, addToWishList};
+module.exports = {createProduct, getAProduct, getAllProduct, updateProduct, deleteProduct, addToWishList, rating};
