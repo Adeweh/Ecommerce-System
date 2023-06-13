@@ -266,8 +266,17 @@ const resetPassword = asyncHandler(async(req, res) =>{
     user.passwordResetExpires= undefined;
     await user.save();
     res.json(user);
-
-
 });
 
-module.exports = {createUser, loginUser, getAllUser, getAUser, deleteUser, updateUser, blockUser, unblockUser, handleRefreshToken, logOut, updatePassword, forgotPasswordToken, resetPassword, loginAdmin,};
+const getWishlist = async(async(req, res)=> {
+    const {_id} = req.user;
+    try{
+        const findUser = await User.findById(_id).populate("wishlist");
+        res.json(findUser);
+
+    }catch(error){
+        throw new Error(error);
+    }
+})
+
+module.exports = {createUser, loginUser, getAllUser, getAUser, deleteUser, updateUser, blockUser, unblockUser, handleRefreshToken, logOut, updatePassword, forgotPasswordToken, resetPassword, loginAdmin, getWishlist,};
