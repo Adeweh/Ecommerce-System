@@ -3,6 +3,7 @@ const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 const slugify = require("slugify");
 const cloudinaryUploadImg = require('../utils/cloudinary');
+const fs = require("fs"); 
 const validateMongoDbId = require("../utils/validateMongodb");
 
 
@@ -143,6 +144,7 @@ const addToWishList = asyncHandler(async(req, res)=> {
         }
     });
 
+
 const rating = asyncHandler(async (req, res) => {
     const {_id} = req.user;
     const {star, prodId, comment} = req.body;
@@ -206,9 +208,11 @@ const rating = asyncHandler(async (req, res) => {
         const urls = [];
         const files = req.files;
         for (const file of files){
-            const {path} = files;
+            const {path} = file;
             const newpath = await uploader(path);
             urls.push(newpath);
+            fs.unlinkSync(path );
+            
         }
             const findProduct = await Product.findByIdAndUpdate(
                 id, {
@@ -224,6 +228,9 @@ const rating = asyncHandler(async (req, res) => {
         throw new Error(error);
         }
  });
+
+
+
 
 
 
